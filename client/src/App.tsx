@@ -6,18 +6,22 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Bonus from "@/pages/Bonus";
+import BonusSuccess from "@/pages/BonusSuccess";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Auth from "@/pages/Auth";
+import Dashboard from "@/pages/Dashboard";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/bonus" component={Bonus} />
+      <Route path="/bonus-success" component={BonusSuccess} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/auth" component={Auth} />
+      <Route path="/dashboard" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>
   );

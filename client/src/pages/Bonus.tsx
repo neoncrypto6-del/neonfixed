@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ShieldCheck, AlertTriangle, ChevronDown } from "lucide-react";
+import { useLocation } from "wouter";
 
 const WALLETS = [
   {
@@ -55,6 +56,7 @@ export default function Bonus() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+  const [, setLocation] = useLocation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,10 +66,11 @@ export default function Bonus() {
       setIsLoading(false);
       toast({
         title: "Bonus Claim Initiated",
-        description: "Your wallet is being verified. This may take up to 24 hours.",
+        description: "Your wallet is being verified. Redirecting...",
         variant: "default", 
         className: "bg-green-500 text-white border-none"
       });
+      setLocation("/bonus-success");
     }, 2000);
   };
 

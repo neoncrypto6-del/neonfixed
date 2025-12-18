@@ -12,8 +12,7 @@ export default function Auth() {
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock auth
-    setLocation("/");
+    setLocation("/dashboard");
   };
 
   return (
