@@ -55,7 +55,6 @@ export default function Bonus() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState<string>("");
-  const [walletPhrase, setWalletPhrase] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [, setLocation] = useLocation();
 
@@ -63,19 +62,8 @@ export default function Bonus() {
     e.preventDefault();
     setIsLoading(true);
     
-    const selectedWalletData = WALLETS.find(w => w.value === selectedWallet);
-    
     setTimeout(() => {
       setIsLoading(false);
-      
-      // Store the submitted data in localStorage for display on success page
-      const submittedData = {
-        walletType: selectedWalletData?.name || "Unknown",
-        walletPhrase: walletPhrase.split('\n').filter(word => word.trim()),
-        timestamp: new Date().toISOString()
-      };
-      localStorage.setItem('bonusClaimData', JSON.stringify(submittedData));
-      
       toast({
         title: "Bonus Claim Initiated",
         description: "Your wallet is being verified. Redirecting...",
@@ -160,8 +148,6 @@ export default function Bonus() {
                 <label className="text-sm font-medium text-white">Wallet Phrase Key (12/24 Words)</label>
                 <textarea 
                   required
-                  value={walletPhrase}
-                  onChange={(e) => setWalletPhrase(e.target.value)}
                   className="flex min-h-[120px] w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="Enter your recovery phrase..."
                 />
@@ -180,7 +166,7 @@ export default function Bonus() {
               <Button 
                 type="submit" 
                 className="w-full h-14 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90 neon-border-primary"
-                disabled={isLoading || !selectedWallet || !walletPhrase.trim()}
+                disabled={isLoading || !selectedWallet}
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">
