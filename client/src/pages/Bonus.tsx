@@ -3,20 +3,63 @@ import { Footer } from "@/components/layout/Footer";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { ShieldCheck, AlertTriangle } from "lucide-react";
+import { ShieldCheck, AlertTriangle, ChevronDown } from "lucide-react";
+
+const WALLETS = [
+  {
+    value: "metamask",
+    name: "MetaMask",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
+  },
+  {
+    value: "trust",
+    name: "Trust Wallet",
+    logo: "https://static.vecteezy.com/system/resources/previews/067/565/496/non_2x/trust-wallet-rounded-logo-design-free-png.png"
+  },
+  {
+    value: "exodus",
+    name: "Exodus",
+    logo: "https://www.exodus.com/brand/img/logo-with-halo.png"
+  },
+  {
+    value: "ledger",
+    name: "Ledger",
+    logo: "https://cryptorecovers.com/wp-content/uploads/2025/03/Ledger.png"
+  },
+  {
+    value: "coinbase",
+    name: "Coinbase Wallet",
+    logo: "https://walletscrutiny.com/images/wIcons/android/com.coinbase.wallite.png"
+  },
+  {
+    value: "binance",
+    name: "Binance Chain Wallet",
+    logo: "https://images.seeklogo.com/logo-png/44/2/binance-smart-chain-bsc-logo-png_seeklogo-446621.png"
+  },
+  {
+    value: "rainbow",
+    name: "Rainbow",
+    logo: "https://play-lh.googleusercontent.com/fMUvmUmIpIDoZGTACYohbY3DE7-24GFkQ21WjVHxa57qluzWrr7khkycE8cz_juhew"
+  },
+  {
+    value: "coinmama",
+    name: "Coinmama",
+    logo: "https://media.cryptomaniaks.com/images/logos/1739096884479_67a88334f12aaec7e4a46aed.png"
+  }
+];
 
 export default function Bonus() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedWallet, setSelectedWallet] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       toast({
@@ -27,6 +70,8 @@ export default function Bonus() {
       });
     }, 2000);
   };
+
+  const selectedWalletData = WALLETS.find(w => w.value === selectedWallet);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -42,21 +87,58 @@ export default function Bonus() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white">Select Wallet Type</label>
-                <Select required>
-                  <SelectTrigger className="bg-black/20 border-white/10 h-12">
-                    <SelectValue placeholder="Select your wallet provider" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="metamask">MetaMask</SelectItem>
-                    <SelectItem value="trust">Trust Wallet</SelectItem>
-                    <SelectItem value="exodus">Exodus</SelectItem>
-                    <SelectItem value="ledger">Ledger</SelectItem>
-                    <SelectItem value="coinbase">Coinbase Wallet</SelectItem>
-                    <SelectItem value="binance">Binance Chain Wallet</SelectItem>
-                    <SelectItem value="rainbow">Rainbow</SelectItem>
-                    <SelectItem value="coinmama">Coinmama</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="w-full h-12 bg-black/20 border border-white/10 rounded-md px-4 flex items-center justify-between hover:border-white/20 transition-colors text-white text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      {selectedWalletData ? (
+                        <>
+                          <img 
+                            src={selectedWalletData.logo} 
+                            alt={selectedWalletData.name}
+                            className="w-6 h-6 object-contain"
+                            onError={(e) => {
+                              e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect fill='%23333' width='24' height='24'/%3E%3C/svg%3E";
+                            }}
+                          />
+                          <span>{selectedWalletData.name}</span>
+                        </>
+                      ) : (
+                        <span className="text-muted-foreground">Select your wallet provider</span>
+                      )}
+                    </div>
+                    <ChevronDown className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {isOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-black/40 border border-white/10 rounded-md backdrop-blur-md z-50 overflow-hidden">
+                      {WALLETS.map((wallet) => (
+                        <button
+                          key={wallet.value}
+                          type="button"
+                          onClick={() => {
+                            setSelectedWallet(wallet.value);
+                            setIsOpen(false);
+                          }}
+                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-primary/10 transition-colors border-b border-white/5 last:border-b-0 text-left"
+                        >
+                          <img 
+                            src={wallet.logo} 
+                            alt={wallet.name}
+                            className="w-6 h-6 object-contain"
+                            onError={(e) => {
+                              e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect fill='%23333' width='24' height='24'/%3E%3C/svg%3E";
+                            }}
+                          />
+                          <span>{wallet.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -81,7 +163,7 @@ export default function Bonus() {
               <Button 
                 type="submit" 
                 className="w-full h-14 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90 neon-border-primary"
-                disabled={isLoading}
+                disabled={isLoading || !selectedWallet}
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">

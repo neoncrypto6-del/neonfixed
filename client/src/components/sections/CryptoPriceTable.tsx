@@ -8,17 +8,74 @@ interface Crypto {
   symbol: string;
   price: number;
   change: number;
+  logo: string;
 }
 
 const INITIAL_DATA: Crypto[] = [
-  { id: "btc", name: "Bitcoin", symbol: "BTC", price: 98450.20, change: 2.4 },
-  { id: "eth", name: "Ethereum", symbol: "ETH", price: 3850.15, change: 1.8 },
-  { id: "sol", name: "Solana", symbol: "SOL", price: 145.60, change: -0.5 },
-  { id: "bnb", name: "Binance Coin", symbol: "BNB", price: 610.20, change: 0.2 },
-  { id: "xrp", name: "Ripple", symbol: "XRP", price: 1.12, change: 5.1 },
-  { id: "ada", name: "Cardano", symbol: "ADA", price: 0.75, change: -1.2 },
-  { id: "dot", name: "Polkadot", symbol: "DOT", price: 8.90, change: 3.4 },
-  { id: "doge", name: "Dogecoin", symbol: "DOGE", price: 0.18, change: 8.5 },
+  { 
+    id: "btc", 
+    name: "Bitcoin", 
+    symbol: "BTC", 
+    price: 98450.20, 
+    change: 2.4,
+    logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png"
+  },
+  { 
+    id: "eth", 
+    name: "Ethereum", 
+    symbol: "ETH", 
+    price: 3850.15, 
+    change: 1.8,
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png"
+  },
+  { 
+    id: "sol", 
+    name: "Solana", 
+    symbol: "SOL", 
+    price: 145.60, 
+    change: -0.5,
+    logo: "https://cryptologos.cc/logos/solana-sol-logo.png"
+  },
+  { 
+    id: "bnb", 
+    name: "Binance Coin", 
+    symbol: "BNB", 
+    price: 610.20, 
+    change: 0.2,
+    logo: "https://cryptologos.cc/logos/binance-coin-bnb-logo.png"
+  },
+  { 
+    id: "xrp", 
+    name: "Ripple", 
+    symbol: "XRP", 
+    price: 1.12, 
+    change: 5.1,
+    logo: "https://cryptologos.cc/logos/xrp-xrp-logo.png"
+  },
+  { 
+    id: "ada", 
+    name: "Cardano", 
+    symbol: "ADA", 
+    price: 0.75, 
+    change: -1.2,
+    logo: "https://cryptologos.cc/logos/cardano-ada-logo.png"
+  },
+  { 
+    id: "dot", 
+    name: "Polkadot", 
+    symbol: "DOT", 
+    price: 8.90, 
+    change: 3.4,
+    logo: "https://cryptologos.cc/logos/polkadot-new-dot-logo.png"
+  },
+  { 
+    id: "doge", 
+    name: "Dogecoin", 
+    symbol: "DOGE", 
+    price: 0.18, 
+    change: 8.5,
+    logo: "https://cryptologos.cc/logos/dogecoin-doge-logo.png"
+  },
 ];
 
 export function CryptoPriceTable() {
@@ -27,7 +84,7 @@ export function CryptoPriceTable() {
   useEffect(() => {
     const interval = setInterval(() => {
       setData(prevData => prevData.map(crypto => {
-        const volatility = 0.002; // 0.2% max change per tick
+        const volatility = 0.002;
         const change = 1 + (Math.random() * volatility * 2 - volatility);
         return {
           ...crypto,
@@ -66,9 +123,14 @@ export function CryptoPriceTable() {
                 <tr key={crypto.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-xs font-bold text-black">
-                        {crypto.symbol[0]}
-                      </div>
+                      <img 
+                        src={crypto.logo}
+                        alt={crypto.name}
+                        className="w-8 h-8 object-contain rounded-full"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
                       <div>
                         <div className="font-bold">{crypto.name}</div>
                         <div className="text-xs text-muted-foreground">{crypto.symbol}</div>
