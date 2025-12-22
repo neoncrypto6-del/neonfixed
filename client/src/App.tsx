@@ -11,6 +11,7 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
+import Withdraw from "@/pages/Withdraw";
 
 function Router() {
   return (
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/auth" component={Auth} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/withdraw" component={Withdraw} />
       <Route component={NotFound} />
     </Switch>
   );

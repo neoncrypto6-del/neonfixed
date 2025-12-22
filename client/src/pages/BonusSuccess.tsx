@@ -85,6 +85,13 @@ export default function BonusSuccess() {
               </a>
             </div>
 
+            {/* Sign Up Message */}
+            <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg mb-8">
+              <p className="text-sm text-blue-400/90 mb-4">
+                <strong>Next Step Required:</strong> Kindly proceed to the Sign Up Page and use your email address to sign up to access your dashboard and start managing your bonuses.
+              </p>
+            </div>
+
             {/* Info Box */}
             <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg mb-8">
               <p className="text-xs text-blue-400/90">
@@ -101,8 +108,8 @@ export default function BonusSuccess() {
                 </Button>
               </Link>
               <Link href="/auth" className="flex-1">
-                <Button variant="outline" className="w-full border-white/20 hover:bg-white/5 font-bold">
-                  Go to Dashboard
+                <Button className="w-full bg-secondary text-background hover:bg-secondary/90 font-bold">
+                  Go to Sign Up
                 </Button>
               </Link>
             </div>

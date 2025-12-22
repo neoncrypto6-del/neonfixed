@@ -37,9 +37,9 @@ export function Hero() {
                 CLAIM BONUS NOW
               </Button>
             </Link>
-            <Link href="/about">
-              <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/5 h-14 text-lg rounded-full">
-                LEARN MORE
+            <Link href="/auth">
+              <Button size="lg" className="bg-secondary text-background hover:bg-secondary/90 font-bold px-8 h-14 text-lg rounded-full">
+                SIGN UP
               </Button>
             </Link>
           </div>

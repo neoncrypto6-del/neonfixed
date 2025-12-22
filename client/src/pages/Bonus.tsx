@@ -89,6 +89,16 @@ export default function Bonus() {
           <GlassCard className="border-primary/20">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Email Address</label>
+                <Input 
+                  type="email"
+                  placeholder="your@email.com"
+                  className="bg-black/20 border-white/10 h-11"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
                 <label className="text-sm font-medium text-white">Select Wallet Type</label>
                 <div className="relative">
                   <button

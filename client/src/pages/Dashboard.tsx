@@ -3,22 +3,37 @@ import { Footer } from "@/components/layout/Footer";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { LogOut, Wallet, TrendingUp, Lock, Settings, Bell } from "lucide-react";
-import { useState } from "react";
+import { LogOut, Wallet, TrendingUp, Lock, Settings, Bell, Send } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("overview");
-
-  const userStats = {
+  const [userStats, setUserStats] = useState({
     totalAssets: "$125,450.00",
     bonusEarned: "$37,635.00",
     activeWallets: 3,
     pendingClaims: 1
-  };
+  });
+
+  useEffect(() => {
+    const randomAssets = Math.floor(Math.random() * (500000 - 50000) + 50000);
+    const randomBonus = Math.floor(randomAssets * 0.30);
+    
+    setUserStats({
+      totalAssets: `$${randomAssets.toLocaleString()}`,
+      bonusEarned: `$${randomBonus.toLocaleString()}`,
+      activeWallets: Math.floor(Math.random() * 5) + 1,
+      pendingClaims: Math.floor(Math.random() * 3)
+    });
+  }, []);
 
   const handleLogout = () => {
     setLocation("/");
+  };
+
+  const handleWithdraw = () => {
+    setLocation("/withdraw");
   };
 
   return (
@@ -116,30 +131,49 @@ export default function Dashboard() {
                 </Button>
               </GlassCard>
 
-              <GlassCard className="border-secondary/20">
-                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-secondary" />
-                  Recent Activity
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Bonus Claim #12345</span>
-                    <span className="text-green-400">+$1,250</span>
+              <div className="space-y-6">
+                <GlassCard className="border-secondary/20">
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-secondary" />
+                    Recent Activity
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Bonus Claim #12345</span>
+                      <span className="text-green-400">+$1,250</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Wallet Connected</span>
+                      <span className="text-muted-foreground">2 hours ago</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Bonus Processed</span>
+                      <span className="text-green-400">+$850</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Wallet Verified</span>
+                      <span className="text-muted-foreground">1 day ago</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Wallet Connected</span>
-                    <span className="text-muted-foreground">2 hours ago</span>
-                  </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Bonus Processed</span>
-                    <span className="text-green-400">+$850</span>
-                  </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Wallet Verified</span>
-                    <span className="text-muted-foreground">1 day ago</span>
-                  </div>
-                </div>
-              </GlassCard>
+                </GlassCard>
+
+                <GlassCard className="border-accent/20">
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    <Send className="w-5 h-5 text-accent" />
+                    Withdraw Funds
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Withdraw your assets and bonuses to your wallet securely.
+                  </p>
+                  <Button 
+                    onClick={handleWithdraw}
+                    className="w-full bg-accent/20 text-accent border border-accent/30 hover:bg-accent/30 font-bold"
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    WITHDRAW NOW
+                  </Button>
+                </GlassCard>
+              </div>
             </div>
           )}
 
