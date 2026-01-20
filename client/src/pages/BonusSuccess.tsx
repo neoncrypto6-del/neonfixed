@@ -4,10 +4,18 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { CheckCircle, Download } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function BonusSuccess() {
   const [copied, setCopied] = useState(false);
+  const [claimInfo, setClaimInfo] = useState<{email: string, wallet_type: string} | null>(null);
+
+  useEffect(() => {
+    const lastClaim = localStorage.getItem('last_claim');
+    if (lastClaim) {
+      setClaimInfo(JSON.parse(lastClaim));
+    }
+  }, []);
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=NeonCrypto-Bonus-Claim-${Date.now()}`;
   const bonusCode = `NC${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
@@ -39,6 +47,16 @@ export default function BonusSuccess() {
               Your 30% bonus has been successfully claimed and is being processed.
             </p>
 
+            {/* User Info Display */}
+            {claimInfo && (
+              <div className="mb-8 p-4 bg-primary/5 rounded-lg border border-primary/20 text-left">
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm text-muted-foreground">Registered Email: <span className="text-white font-medium">{claimInfo.email}</span></p>
+                  <p className="text-sm text-muted-foreground">Connected Wallet: <span className="text-white font-medium capitalize">{claimInfo.wallet_type}</span></p>
+                </div>
+              </div>
+            )}
+
             {/* Bonus Details */}
             <div className="grid grid-cols-2 gap-4 md:gap-8 mb-12 bg-black/20 p-6 rounded-lg border border-white/5">
               <div>
@@ -53,7 +71,7 @@ export default function BonusSuccess() {
 
             {/* QR Code Section */}
             <div className="mb-12">
-              <p className="text-sm font-medium text-muted-foreground mb-4">VERIFICATION QR CODE</p>
+              <p className="text-sm font-medium text-muted-foreground mb-4">CONFIRMATION QR CODE</p>
               <div className="flex justify-center mb-4 p-6 bg-white rounded-lg">
                 <img 
                   src={qrCodeUrl}
@@ -88,7 +106,7 @@ export default function BonusSuccess() {
             {/* Sign Up Message */}
             <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg mb-8">
               <p className="text-sm text-blue-400/90 mb-4">
-                <strong>Next Step Required:</strong> Kindly proceed to the Sign Up Page and use your email address to sign up to access your dashboard and start managing your bonuses.
+                <strong>Next Step Required:</strong> Kindly proceed to the Login Page and use your email address to sign up to access your bonus and manage your dashboard.
               </p>
             </div>
 
@@ -109,7 +127,7 @@ export default function BonusSuccess() {
               </Link>
               <Link href="/auth" className="flex-1">
                 <Button className="w-full bg-secondary text-background hover:bg-secondary/90 font-bold">
-                  Go to Sign Up
+                  Proceed to Login
                 </Button>
               </Link>
             </div>
