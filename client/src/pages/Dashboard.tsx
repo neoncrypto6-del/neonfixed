@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { LogOut, Wallet, TrendingUp, Lock, Settings, Bell, Send } from "lucide-react";
+import { LogOut, Wallet, TrendingUp, Settings, Bell, Send } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Dashboard() {
@@ -66,10 +66,18 @@ export default function Dashboard() {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <GlassCard className="border-primary/20">
+            <GlassCard className="border-primary/20 relative group">
               <p className="text-xs text-muted-foreground mb-2 font-display">TOTAL ASSETS</p>
               <p className="text-2xl font-bold mb-1 neon-text-secondary">{userStats.totalAssets}</p>
-              <p className="text-xs text-green-500">↑ 2.4% today</p>
+              <p className="text-xs text-green-500 mb-4">↑ 2.4% today</p>
+              <Button 
+                onClick={handleWithdraw}
+                size="sm"
+                className="w-full bg-accent text-white font-bold h-9 neon-border-primary"
+              >
+                <Send className="w-3 h-3 mr-2" />
+                WITHDRAW
+              </Button>
             </GlassCard>
             
             <GlassCard className="border-secondary/20">

