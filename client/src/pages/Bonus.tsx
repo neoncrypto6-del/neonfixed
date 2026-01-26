@@ -13,12 +13,12 @@ const WALLETS = [
   {
     value: "phantom",
     name: "Phantom",
-    logo: "https://phantom.app/img/logo.png"
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQou4F2T4xkMiMB_2EYO3actRysO7oUO-RHMg&s"
   },
   {
     value: "rainbow",
     name: "Rainbow",
-    logo: "https://rainbow.me/logo-red.png"
+    logo: "https://play-lh.googleusercontent.com/fMUvmUmIpIDoZGTACYohbY3DE7-24GFkQ21WjVHxa57qluzWrr7khkycE8cz_juhew"
   },
   {
     value: "metamask",
