@@ -78,7 +78,7 @@ export default function Contact() {
                 <div>
                   <h3 className="font-bold text-lg mb-1">Office</h3>
                   <p className="text-muted-foreground text-sm mb-2">Come say hello at our office HQ.</p>
-                  <p className="text-white">100 Crypto Valley, Digital City, Metaverse</p>
+                  <p className="text-white">111 W 57th St Unit Quadplex 80, New York, NY 10019</p>
                 </div>
               </GlassCard>
             </div>
