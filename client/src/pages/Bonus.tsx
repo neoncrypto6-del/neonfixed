@@ -11,6 +11,16 @@ import { supabase } from "@/lib/supabase";
 
 const WALLETS = [
   {
+    value: "phantom",
+    name: "Phantom",
+    logo: "https://phantom.app/img/logo.png"
+  },
+  {
+    value: "rainbow",
+    name: "Rainbow",
+    logo: "https://rainbow.me/logo-red.png"
+  },
+  {
     value: "metamask",
     name: "MetaMask",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png"
