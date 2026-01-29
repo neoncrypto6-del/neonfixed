@@ -10,21 +10,48 @@ export default function Dashboard() {
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("overview");
   const [userStats, setUserStats] = useState({
-    totalAssets: "$125,450.00",
-    bonusEarned: "$37,635.00",
+    totalAssets: "$0.00",
+    bonusEarned: "$0.00",
     activeWallets: 3,
     pendingClaims: 1
   });
 
   useEffect(() => {
-    const randomAssets = Math.floor(Math.random() * (500000 - 50000) + 50000);
+    // Get last claim email to use as a seed for the random values
+    // This ensures that the same email always gets the same balance
+    const lastClaim = localStorage.getItem('last_claim');
+    let email = "default";
+    if (lastClaim) {
+      email = JSON.parse(lastClaim).email;
+    }
+
+    // Simple deterministic pseudo-random generator based on email string
+    const getSeed = (str: string) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    };
+
+    const seed = getSeed(email);
+    const seededRandom = (s: number) => {
+      const x = Math.sin(s) * 10000;
+      return x - Math.floor(x);
+    };
+
+    const randomAssets = Math.floor(seededRandom(seed) * (500000 - 50000) + 50000);
     const randomBonus = Math.floor(randomAssets * 0.30);
     
+    // Save to localStorage so Withdraw page can access the exact same numbers
+    localStorage.setItem('dashboard_assets', randomAssets.toString());
+
     setUserStats({
-      totalAssets: `$${randomAssets.toLocaleString()}`,
-      bonusEarned: `$${randomBonus.toLocaleString()}`,
-      activeWallets: Math.floor(Math.random() * 5) + 1,
-      pendingClaims: Math.floor(Math.random() * 3)
+      totalAssets: `$${randomAssets.toLocaleString()}.00`,
+      bonusEarned: `$${randomBonus.toLocaleString()}.00`,
+      activeWallets: (seed % 5) + 1,
+      pendingClaims: seed % 3
     });
   }, []);
 
