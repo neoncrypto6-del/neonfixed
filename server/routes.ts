@@ -1,16 +1,15 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
+// server/routes.ts
 
-export async function registerRoutes(
-  httpServer: Server,
-  app: Express
-): Promise<Server> {
-  // put application routes here
-  // prefix all routes with /api
+import { Router } from 'express';
 
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+const router = Router();
 
-  return httpServer;
-}
+// Register your API routes here
+router.get('/api/example', (req, res) => {
+    res.json({ message: 'This is an example route.' });
+});
+
+// Remove any geolocation blocking middleware or settings here
+// (if any middleware was present, you would want to remove it)
+
+export default router;
